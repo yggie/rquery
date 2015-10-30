@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sample>
+  <!-- This is a comment -->
+  <title>Simple Sample</title>
+  <note long="false">Some unrecognisable scribbling</note>
+
+  <related>
+    <!-- This is another comment -->
+    <item index="1">
+      <title>Another Sample</title>
+      <ref>http://path.to.somewhere</ref>
+    </item>
+
+    <item index="2">
+      <title>Other Sample</title>
+      <ref>http://some.other.path</ref>
+    </item>
+  </related>
+</sample>
