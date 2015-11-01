@@ -8,7 +8,7 @@ pub fn new_document() -> forest::Document {
 fn it_supports_the_tag_selector() {
     let document = new_document();
 
-    let elements: Vec<&forest::Element> = document.select_all("note").collect();
+    let elements: Vec<&forest::Element> = document.select_all("note").unwrap().collect();
 
     assert_eq!(elements.len(), 1);
 
@@ -20,7 +20,23 @@ fn it_supports_the_tag_selector() {
 fn it_supports_the_nested_tag_selector() {
     let document = new_document();
 
-    let elements: Vec<&forest::Element> = document.select_all("related title").collect();
+    let elements: Vec<&forest::Element> = document.select_all("related title").unwrap().collect();
+
+    assert_eq!(elements.len(), 2);
+
+    let element_tag_names: Vec<String> = elements.iter()
+        .map(|el| el.tag_name().to_string())
+        .collect();
+    assert_eq!(element_tag_names, vec!("title", "title"));
+}
+
+#[test]
+fn it_supports_nesting_selectors() {
+    let document = new_document();
+
+    let elements: Vec<&forest::Element> = document.select_all("related").unwrap()
+        .flat_map(|element| element.select_all("title").unwrap())
+        .collect();
 
     assert_eq!(elements.len(), 2);
 
@@ -34,7 +50,7 @@ fn it_supports_the_nested_tag_selector() {
 // fn it_supports_the_direct_child_tag_selector() {
 //     let document = new_document();
 //
-//     let elements: Vec<&forest::Element> = document.select_all("sample > title").collect();
+//     let elements: Vec<&forest::Element> = document.select_all("sample > title").unwrap().collect();
 //
 //     assert_eq!(elements.len(), 1);
 //

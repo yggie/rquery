@@ -7,4 +7,7 @@ mod integration {
 
     #[cfg(test)]
     mod css_selectors_test;
+
+    #[cfg(test)]
+    mod element_test;
 }

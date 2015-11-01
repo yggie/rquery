@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sample>
+<sample type="simple">
+  This is some text
   <!-- This is a comment -->
   <title>Simple Sample</title>
   <note long="false">Some unrecognisable scribbling</note>
