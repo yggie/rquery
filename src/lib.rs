@@ -1,8 +1,10 @@
 extern crate xml;
 
+mod selector;
 mod document;
 
 pub use self::document::Document;
+pub use self::selector::{ CompoundSelector, Scope, Selector };
 
 use std::rc::Rc;
 use std::iter::{ empty, once };
@@ -17,22 +19,31 @@ pub struct Element {
 
 impl Element {
     pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {
-        let initial_iterator: Box<Iterator<Item=&'a Element>> = Box::new(once(self));
+        CompoundSelector::parse(selector).and_then(|compound_selectors| {
+            let initial_iterator: Box<Iterator<Item=&'a Element>> = Box::new(once(self));
 
-        let iterator = selector.split_whitespace()
-            .fold(initial_iterator, |iter, selector_part| {
-                Box::new(iter
-                    .flat_map(|child| child.children_deep_iter())
-                    .filter_map(move |child| {
-                        if child.tag_name() == selector_part {
-                            Some(child)
-                        } else {
-                            None
-                        }
-                    }))
-            });
+            let iterator = compound_selectors.into_iter()
+                .fold(initial_iterator, |iter, compound_selector| {
+                    let scope = compound_selector.scope;
 
-        return Ok(Box::new(iterator));
+                    Box::new(iter
+                         .flat_map(move |child| {
+                             match scope {
+                                 Scope::IndirectChild => child.children_deep_iter(),
+                                 Scope::DirectChild => child.children_iter(),
+                             }
+                         })
+                        .filter_map(move |child| {
+                            if child.matches(&compound_selector) {
+                                Some(child)
+                            } else {
+                                None
+                            }
+                        }))
+                });
+
+            return Ok(iterator);
+        })
     }
 
     pub fn children_iter<'a>(&'a self) -> Box<Iterator<Item=&'a Element> + 'a> {
@@ -68,5 +79,12 @@ impl Element {
 
     pub fn text(&self) -> &String {
         &self.text
+    }
+
+    pub fn matches(&self, compound_selector: &CompoundSelector) -> bool {
+        match compound_selector.parts.last() {
+            Some(&Selector::TagName(ref name)) => self.tag_name() == name,
+            _ => unimplemented!(),
+        }
     }
 }
