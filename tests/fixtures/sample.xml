@@ -2,7 +2,7 @@
 <sample type="simple">
   This is some text
   <!-- This is a comment -->
-  <title>Simple Sample</title>
+  <title ref="main-title">Sample Document</title>
   <note long="false">Some unrecognisable scribbling</note>
 
   <related>

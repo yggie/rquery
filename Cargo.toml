@@ -1,7 +1,11 @@
 [package]
-name = "forest"
+name = "rquery"
 version = "0.1.0"
 authors = ["Bryan Yap <bryan.yap.mh@gmail.com>"]
+
+[[test]]
+name = "rquery-tests"
+path = "tests/lib.rs"
 
 [dependencies]
 xml-rs = "*"

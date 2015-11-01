@@ -1,4 +1,4 @@
-use forest::{ CompoundSelector, Scope, Selector };
+use rquery::{ CompoundSelector, Scope, Selector };
 
 fn assert_as_single_tag(compound_selector: &CompoundSelector, tag_name: &str) {
     assert_eq!(compound_selector.parts.len(), 1);
