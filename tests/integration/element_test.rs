@@ -9,19 +9,23 @@ pub fn new_document() -> forest::Document {
 fn it_knows_its_tag_name() {
     let document = new_document();
 
-    assert_eq!(document.root().tag_name(), "sample");
+    let element = document.select("sample").unwrap();
+    assert_eq!(element.tag_name(), "sample");
 }
 
 #[test]
 fn it_knows_its_attributes() {
     let document = new_document();
 
-    assert_eq!(document.root().attr("type").unwrap(), "simple");
+    let element = document.select("sample").unwrap();
+    assert_eq!(element.attr("type").unwrap(), "simple");
 }
 
 #[test]
 fn it_knows_its_inner_text_contents() {
     let document = new_document();
 
-    assert_eq!(document.root().text().trim(), "This is some text");
+
+    let element = document.select("sample").unwrap();
+    assert_eq!(element.text().trim(), "This is some text");
 }

@@ -46,6 +46,16 @@ impl Element {
         })
     }
 
+    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
+        self.select_all(selector).and_then(|mut iterator| {
+            if let Some(element) = iterator.next() {
+                Ok(element)
+            } else {
+                Err(())
+            }
+        })
+    }
+
     pub fn children_iter<'a>(&'a self) -> Box<Iterator<Item=&'a Element> + 'a> {
         if let Some(ref children) = self.children {
             Box::new(children.iter().map(|node| -> &'a Element { node }))

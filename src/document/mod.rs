@@ -79,7 +79,12 @@ impl Document {
                             elements.push(parent);
                         } else {
                             return Ok(Document {
-                                root: child_node
+                                root: Element {
+                                    tag_name: "[root]".to_string(),
+                                    children: Some(vec!(Rc::new(child_node))),
+                                    attr_map: HashMap::new(),
+                                    text: String::new(),
+                                }
                             });
                         }
                     },
@@ -104,12 +109,12 @@ impl Document {
         })
     }
 
-    pub fn root(&self) -> &Element {
-        &self.root
+    pub fn number_of_elements(&self) -> usize {
+        self.root.subtree_size() - 1
     }
 
-    pub fn number_of_elements(&self) -> usize {
-        self.root.subtree_size()
+    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
+        self.root.select(selector)
     }
 
     pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {

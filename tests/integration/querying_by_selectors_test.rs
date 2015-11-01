@@ -46,14 +46,14 @@ fn it_supports_nesting_selectors() {
     assert_eq!(element_tag_names, vec!("title", "title"));
 }
 
-// #[test]
-// fn it_supports_the_direct_child_tag_selector() {
-//     let document = new_document();
-//
-//     let elements: Vec<&forest::Element> = document.select_all("sample > title").unwrap().collect();
-//
-//     assert_eq!(elements.len(), 1);
-//
-//     let element = elements[0];
-//     assert_eq!(element.tag_name(), "title");
-// }
+#[test]
+fn it_supports_the_direct_child_tag_selector() {
+    let document = new_document();
+
+    let elements: Vec<&forest::Element> = document.select_all("sample > title").unwrap().collect();
+
+    assert_eq!(elements.len(), 1);
+
+    let element = elements[0];
+    assert_eq!(element.tag_name(), "title");
+}
