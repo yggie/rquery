@@ -24,6 +24,8 @@
 //! }
 //! ```
 
+#![warn(missing_docs)]
+
 extern crate xml;
 
 mod selector;
@@ -36,6 +38,7 @@ use std::rc::Rc;
 use std::iter::{ empty, once };
 use std::collections::HashMap;
 
+/// Represents a single element in the DOM tree.
 pub struct Element {
     tag_name: String,
     children: Option<Vec<Rc<Element>>>,
@@ -44,6 +47,8 @@ pub struct Element {
 }
 
 impl Element {
+    /// Searches the elements children for elements matching the given CSS
+    /// selector.
     pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {
         CompoundSelector::parse(selector).and_then(|compound_selectors| {
             let initial_iterator: Box<Iterator<Item=&'a Element>> = Box::new(once(self));
@@ -72,6 +77,7 @@ impl Element {
         })
     }
 
+    /// Just like `select_all` but only returns the first match.
     pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
         self.select_all(selector).and_then(|mut iterator| {
             if let Some(element) = iterator.next() {
@@ -82,6 +88,7 @@ impl Element {
         })
     }
 
+    /// Returns an iterator over the element’s direct children.
     pub fn children_iter<'a>(&'a self) -> Box<Iterator<Item=&'a Element> + 'a> {
         if let Some(ref children) = self.children {
             Box::new(children.iter().map(|node| -> &'a Element { node }))
@@ -90,6 +97,8 @@ impl Element {
         }
     }
 
+    /// Returns an iterator over all the element’s children, including indirect
+    /// child elements.
     pub fn children_deep_iter<'a>(&'a self) -> Box<Iterator<Item=&'a Element> + 'a> {
         let iterator = self.children_iter()
             .flat_map(|child| once(child).chain(child.children_deep_iter()));
@@ -97,6 +106,7 @@ impl Element {
         Box::new(iterator)
     }
 
+    /// Returns the size of the DOM subtree, including the current element.
     pub fn subtree_size(&self) -> usize {
         if let Some(ref children) = self.children {
             children.iter().fold(1, |subtotal, child| child.subtree_size() + subtotal)
@@ -105,18 +115,22 @@ impl Element {
         }
     }
 
+    /// Returns the name of the element’s tag.
     pub fn tag_name(&self) -> &str {
         &self.tag_name
     }
 
+    /// Returns the value of the element attribute if found.
     pub fn attr(&self, attr_name: &str) -> Option<&String> {
         self.attr_map.get(attr_name)
     }
 
+    /// Returns the text contained within the element.
     pub fn text(&self) -> &String {
         &self.text
     }
 
+    /// Returns true if the element matches the given selector.
     pub fn matches(&self, compound_selector: &CompoundSelector) -> bool {
         match compound_selector.parts.last() {
             Some(&Selector::TagName(ref name)) => self.tag_name() == name,

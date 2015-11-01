@@ -8,17 +8,20 @@ use xml::reader::{ EventReader, XmlEvent };
 
 use super::Element;
 
+/// The various errors that can happen when creating a document.
 #[derive(Debug)]
 pub enum DocumentError {
     UnableToOpenFile(String),
     ParseError(String),
 }
 
+/// The DOM tree representation of the parsed document.
 pub struct Document {
     root: Element,
 }
 
 impl Document {
+    /// Creates a new document from a byte stream.
     pub fn new_from_xml_stream<R: Read>(stream: R) -> Result<Document, DocumentError> {
         let event_reader = EventReader::new(stream);
 
@@ -84,10 +87,12 @@ impl Document {
         panic!("Root element was not properly returned!");
     }
 
+    /// Creates a new document from a string.
     pub fn new_from_xml_string(string: &str) -> Result<Document, DocumentError> {
         Document::new_from_xml_stream(string.as_bytes())
     }
 
+    /// Creates a new document from a file.
     pub fn new_from_xml_file(filename: &str) -> Result<Document, DocumentError> {
         let path = Path::new(filename);
 
@@ -100,15 +105,18 @@ impl Document {
         }
     }
 
+    /// Returns the total number of elements in the document.
     pub fn number_of_elements(&self) -> usize {
         self.root.subtree_size() - 1
     }
 
-    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
-        self.root.select(selector)
-    }
-
+    /// Searches the document for elements matching the given CSS selector.
     pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {
         self.root.select_all(selector)
+    }
+
+    /// Just like `select_all` but only returns the first match.
+    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
+        self.root.select(selector)
     }
 }

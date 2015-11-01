@@ -1,7 +1,14 @@
 [package]
 name = "rquery"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Bryan Yap <bryan.yap.mh@gmail.com>"]
+description = "A simple implementation of a HTML/XML DOM tree which allows simple operations like querying by CSS selectors, makes dealing with XML files less painful."
+documentation = "https://yggie.github.io/rust-xml-query/rquery"
+homepage = "https://github.com/yggie/rust-xml-query"
+repository = "https://github.com/yggie/rust-xml-query"
+readme = "README.md"
+keywords = ["xml", "DOM"]
+license = "MIT"
 
 [[test]]
 name = "rquery-tests"
