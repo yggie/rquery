@@ -13,7 +13,7 @@ fn it_captures_the_correct_number_of_elements() {
 }
 
 #[test]
-fn it_returns_an_error_for_unsupported_file_extensions() {
+fn it_returns_an_error_for_non_existent_files() {
     let result = forest::Document::new_from_file("non-existent.why");
 
     assert!(result.is_err());

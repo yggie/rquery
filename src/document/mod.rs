@@ -10,7 +10,6 @@ use super::Element;
 
 #[derive(Debug)]
 pub enum DocumentError {
-    InvalidFileExtension(String),
     UnableToOpenFile(String),
     ParseError(String),
 }
@@ -23,28 +22,6 @@ impl Document {
     pub fn new_from_file(filename: &str) -> Result<Document, DocumentError> {
         let path = Path::new(filename);
 
-        if let Some(os_string) = path.extension() {
-            match os_string.to_str() {
-                Some("xml") => Document::new_from_xml_file(path),
-                Some(other) => Err(DocumentError::InvalidFileExtension(other.to_string())),
-                _ => unimplemented!(),
-            }
-        } else {
-            Err(DocumentError::InvalidFileExtension("".to_string()))
-        }
-    }
-
-    fn create_event_reader(path: &Path) -> Result<EventReader<BufReader<File>>, DocumentError> {
-        if let Ok(file) = File::open(path) {
-            let reader = BufReader::new(file);
-
-            Ok(EventReader::new(reader))
-        } else {
-            Err(DocumentError::UnableToOpenFile(path.to_str().unwrap().to_string()))
-        }
-    }
-
-    fn new_from_xml_file(path: &Path) -> Result<Document, DocumentError> {
         Document::create_event_reader(path).and_then(|event_reader| {
             let mut elements: Vec<Element> = Vec::new();
 
@@ -107,6 +84,16 @@ impl Document {
 
             panic!("Root element was not properly returned!");
         })
+    }
+
+    fn create_event_reader(path: &Path) -> Result<EventReader<BufReader<File>>, DocumentError> {
+        if let Ok(file) = File::open(path) {
+            let reader = BufReader::new(file);
+
+            Ok(EventReader::new(reader))
+        } else {
+            Err(DocumentError::UnableToOpenFile(path.to_str().unwrap().to_string()))
+        }
     }
 
     pub fn number_of_elements(&self) -> usize {
