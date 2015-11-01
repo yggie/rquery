@@ -14,14 +14,21 @@ pub struct Node {
 
 impl Node {
     pub fn select_all<'a>(&'a self, selector: &'a str) -> Box<Iterator<Item=&'a Element> + 'a> {
-        let iterator = self.children_deep_iter()
-            .filter_map(move |child| {
-                if child.element.tag_name() == selector {
-                    Some(&child.element)
-                } else {
-                    None
-                }
-            });
+        let initial_iterator: Box<Iterator<Item=&'a Node> + 'a> = Box::new(once(self));
+
+        let iterator = selector.split_whitespace()
+            .fold(initial_iterator, |iter, selector_part| {
+                Box::new(iter
+                    .flat_map(|child| child.children_deep_iter())
+                    .filter_map(move |child| {
+                        if child.element.tag_name() == selector_part {
+                            Some(child)
+                        } else {
+                            None
+                        }
+                    }))
+            })
+            .map(|child| &child.element);
 
         return Box::new(iterator);
     }

@@ -16,20 +16,20 @@ fn it_supports_the_tag_selector() {
     assert_eq!(element.tag_name(), "note");
 }
 
-// #[test]
-// fn it_supports_the_nested_tag_selector() {
-//     let document = new_document();
-//
-//     let elements: Vec<&forest::Element> = document.select_all("related title").collect();
-//
-//     assert_eq!(elements.len(), 2);
-//
-//     let element_tag_names: Vec<String> = elements.iter()
-//         .map(|el| el.tag_name().to_string())
-//         .collect();
-//     assert_eq!(element_tag_names, vec!("title", "title"));
-// }
-//
+#[test]
+fn it_supports_the_nested_tag_selector() {
+    let document = new_document();
+
+    let elements: Vec<&forest::Element> = document.select_all("related title").collect();
+
+    assert_eq!(elements.len(), 2);
+
+    let element_tag_names: Vec<String> = elements.iter()
+        .map(|el| el.tag_name().to_string())
+        .collect();
+    assert_eq!(element_tag_names, vec!("title", "title"));
+}
+
 // #[test]
 // fn it_supports_the_direct_child_tag_selector() {
 //     let document = new_document();
