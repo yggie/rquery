@@ -1,4 +1,4 @@
-# rust-xml-query
+# rquery
 
 [![Build Status](https://travis-ci.org/yggie/rust-xml-query.svg?branch=master)](https://travis-ci.org/yggie/rust-xml-query)
 [![docs](https://img.shields.io/badge/documentation-rust_beta-6495ed.svg?style=flat-square)](https://yggie.github.io/rust-xml-query/rquery)
