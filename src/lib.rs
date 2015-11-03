@@ -32,58 +32,110 @@ mod selector;
 mod document;
 
 pub use self::document::Document;
-pub use self::selector::{ CompoundSelector, Scope, Selector };
+pub use self::selector::{ CompoundSelector, Scope, Selector, UnexpectedTokenError };
 
 use std::rc::Rc;
 use std::iter::{ empty, once };
+use std::marker::PhantomData;
 use std::collections::HashMap;
 
 /// Represents a single element in the DOM tree.
+#[derive(Clone, Debug)]
 pub struct Element {
+    node_index: usize,
     tag_name: String,
     children: Option<Vec<Rc<Element>>>,
     attr_map: HashMap<String, String>,
     text: String,
 }
 
+/// Errors which can be returned when performing a select operation.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum SelectError {
+    /// Returned when the selector could not be parsed successfully.
+    ParseError(UnexpectedTokenError),
+    /// Returned when there were no matches for the selector.
+    NoMatchError,
+}
+
+struct UniqueElements<'a, I: Iterator<Item=&'a Element> + 'a> {
+    next_index: usize,
+    inner_iter: I,
+    phantom_data: PhantomData<&'a i32>,
+}
+
+impl<'a, I: Iterator<Item=&'a Element>> Iterator for UniqueElements<'a, I> {
+    type Item = &'a Element;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            match self.inner_iter.next() {
+                Some(element) if element.node_index < self.next_index => {
+                    println!("SKIPPED");
+                    // do nothing
+                },
+
+                Some(element) => {
+                    self.next_index = element.node_index + 1;
+                    return Some(element);
+                },
+
+                None => return None,
+            }
+        }
+    }
+}
+
 impl Element {
     /// Searches the elements children for elements matching the given CSS
     /// selector.
-    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {
-        CompoundSelector::parse(selector).and_then(|compound_selectors| {
-            let initial_iterator: Box<Iterator<Item=&'a Element>> = Box::new(once(self));
+    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
+        CompoundSelector::parse(selector)
+            .map_err(|err| SelectError::ParseError(err))
+            .and_then(|compound_selectors| {
+                let initial_iterator: Box<Iterator<Item=&'a Element>> = Box::new(once(self));
 
-            let iterator = compound_selectors.into_iter()
-                .fold(initial_iterator, |iter, compound_selector| {
-                    let scope = compound_selector.scope;
+                let iterator = compound_selectors.into_iter()
+                    .fold(initial_iterator, |iter, compound_selector| {
+                        let scope = compound_selector.scope;
 
-                    Box::new(iter
-                         .flat_map(move |child| {
-                             match scope {
-                                 Scope::IndirectChild => child.children_deep_iter(),
-                                 Scope::DirectChild => child.children_iter(),
-                             }
-                         })
-                        .filter_map(move |child| {
-                            if child.matches(&compound_selector) {
-                                Some(child)
-                            } else {
-                                None
-                            }
-                        }))
-                });
+                        let children_iter = iter
+                             .flat_map(move |child| {
+                                 match scope {
+                                     Scope::IndirectChild => child.children_deep_iter(),
+                                     Scope::DirectChild => child.children_iter(),
+                                 }
+                             });
 
-            return Ok(iterator);
-        })
+                        let matching_children_iter = children_iter
+                            .filter_map(move |child| {
+                                if child.matches(&compound_selector) {
+                                    Some(child)
+                                } else {
+                                    None
+                                }
+                            });
+
+                        let unique_children_iter = UniqueElements {
+                            next_index: 0,
+                            inner_iter: matching_children_iter,
+                            phantom_data: PhantomData,
+                        };
+
+                        Box::new(unique_children_iter)
+                    });
+
+                return Ok(iterator);
+            })
     }
 
     /// Just like `select_all` but only returns the first match.
-    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
+    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, SelectError> {
         self.select_all(selector).and_then(|mut iterator| {
             if let Some(element) = iterator.next() {
                 Ok(element)
             } else {
-                Err(())
+                Err(SelectError::NoMatchError)
             }
         })
     }

@@ -1,4 +1,4 @@
-use rquery::{ Document, Element };
+use rquery::{ Document, Element, SelectError };
 
 pub fn new_document() -> Document {
     Document::new_from_xml_string(r#"
@@ -11,12 +11,12 @@ pub fn new_document() -> Document {
 
   <related>
     <!-- This is another comment -->
-    <item index="1">
+    <item id="1">
       <title>Another Sample</title>
       <ref>http://path.to.somewhere</ref>
     </item>
 
-    <item index="2">
+    <item id="2">
       <title>Other Sample</title>
       <ref>http://some.other.path</ref>
     </item>
@@ -95,16 +95,28 @@ fn it_supports_the_direct_child_tag_selector() {
 }
 
 #[test]
+fn it_returns_a_no_match_error_when_the_selector_does_not_match_any_element() {
+    let document = new_document();
+
+    let result = document.select("nonexistentelement");
+
+    if let Err(err) = result {
+        assert_eq!(err, SelectError::NoMatchError);
+    } else {
+        panic!("The select did not result in an error!");
+    }
+}
+
+#[test]
 fn it_does_not_repeat_elements() {
     let document = new_document();
 
     let unique_count = document.select_all("div").unwrap().count();
     assert_eq!(unique_count, 8);
 
-    // TODO fix this
-    // let direct_nested_count = document.select_all("div > div").unwrap().count();
-    // assert_eq!(unique_count, 6);
-    //
-    // let nested_count = document.select_all("div div").unwrap().count();
-    // assert_eq!(unique_count, 7);
+    let direct_nested_count = document.select_all("div > div").unwrap().count();
+    assert_eq!(direct_nested_count, 5);
+
+    let nested_count = document.select_all("div div").unwrap().count();
+    assert_eq!(nested_count, 6);
 }

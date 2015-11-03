@@ -6,16 +6,17 @@ use std::collections::HashMap;
 
 use xml::reader::{ EventReader, XmlEvent };
 
-use super::Element;
+use super::{ Element, SelectError };
 
 /// The various errors that can happen when creating a document.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum DocumentError {
     UnableToOpenFile(String),
     ParseError(String),
 }
 
 /// The DOM tree representation of the parsed document.
+#[derive(Clone, Debug)]
 pub struct Document {
     root: Element,
 }
@@ -26,6 +27,7 @@ impl Document {
         let event_reader = EventReader::new(stream);
 
         let mut elements: Vec<Element> = Vec::new();
+        let mut next_node_index = 1;
 
         for event in event_reader {
             match event {
@@ -38,11 +40,13 @@ impl Document {
                         });
 
                     elements.push(Element {
+                        node_index: next_node_index,
                         children: None,
                         tag_name: name.local_name.clone(),
                         attr_map: attr_map,
                         text: String::new(),
                     });
+                    next_node_index = next_node_index + 1;
                 },
 
                 Ok(XmlEvent::EndElement { ref name, .. }) if elements.last().unwrap().tag_name() == name.local_name  => {
@@ -59,6 +63,7 @@ impl Document {
                     } else {
                         return Ok(Document {
                             root: Element {
+                                node_index: 0,
                                 tag_name: "[root]".to_string(),
                                 children: Some(vec!(Rc::new(child_node))),
                                 attr_map: HashMap::new(),
@@ -111,12 +116,60 @@ impl Document {
     }
 
     /// Searches the document for elements matching the given CSS selector.
-    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, ()> {
+    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
         self.root.select_all(selector)
     }
 
     /// Just like `select_all` but only returns the first match.
-    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, ()> {
+    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, SelectError> {
         self.root.select(selector)
     }
+}
+
+#[test]
+fn it_assigns_node_indices_in_monotonically_increasing_order() {
+    let document = Document::new_from_xml_string(r#"
+<?xml version="1.0" encoding="UTF-8"?>
+<sample type="simple">
+  This is some text
+  <!-- This is a comment -->
+  <title>Simple Sample</title>
+  <note long="false">Some unrecognisable scribbling</note>
+
+  <related>
+    <!-- This is another comment -->
+    <item id="1">
+      <title>Another Sample</title>
+      <ref>http://path.to.somewhere</ref>
+    </item>
+
+    <item id="2">
+      <title>Other Sample</title>
+      <ref>http://some.other.path</ref>
+    </item>
+  </related>
+
+  <!-- div soup goodness -->
+  <div></div>
+  <div>
+    <other>
+      <div></div>
+    </other>
+    <div>
+      <div></div>
+      <div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</sample>
+"#).unwrap();
+
+    assert_eq!(document.root.node_index, 0);
+
+    document.root.children_deep_iter().fold(0, |index, child| {
+        assert!(index < child.node_index);
+        child.node_index
+    });
 }

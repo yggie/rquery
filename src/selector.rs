@@ -1,5 +1,11 @@
+/// An error which is returned when parsing a selector encounters an unexpected
+/// token
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct UnexpectedTokenError(pub char);
+
 /// Represents a component of a parsed CSS selector is used to match a single
 /// element.
+#[derive(Clone, Debug)]
 pub struct CompoundSelector {
     /// The scope of the selector.
     pub scope: Scope,
@@ -21,8 +27,10 @@ pub enum Scope {
 /// The individual parts of the `CompoundSelector`. For example, the selector
 /// `input[type="radio"]` has two parts, the `TagName` and `Attribute`
 /// selectors.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Selector {
+    /// Represents an id selector (e.g. `#the-id`)
+    Id(String),
     /// Represents a tag name selector (e.g. `input`)
     TagName(String),
     /// Represents an attribute selector (e.g. `[type="radio"]`)
@@ -49,20 +57,25 @@ impl<I: Iterator<Item=String>> Iterator for SelectorParts<I> {
 
 impl CompoundSelector {
     /// Parses the string and converts it to a list of `CompoundSelector`s.
-    pub fn parse(selector: &str) -> Result<Vec<CompoundSelector>, ()> {
+    pub fn parse(selector: &str) -> Result<Vec<CompoundSelector>, UnexpectedTokenError> {
         let normalized_selector = selector.split(">").collect::<Vec<&str>>().join(" > ");
 
         let selector_parts = SelectorParts {
             inner_iter: normalized_selector.split_whitespace().into_iter().map(|s| s.to_string()),
         };
 
-        Ok(selector_parts
-           .map(|(scope, part)| {
-               CompoundSelector {
-                   scope: scope,
-                   parts: vec!(Selector::TagName(part.to_string()))
+        selector_parts
+           .fold(Ok(Vec::new()), |result_so_far, (scope, part)| {
+               if let Ok(mut compound_selectors) = result_so_far {
+                   compound_selectors.push(CompoundSelector {
+                       scope: scope,
+                       parts: vec!(Selector::TagName(part.to_string()))
+                   });
+
+                   Ok(compound_selectors)
+               } else {
+                   result_so_far
                }
            })
-           .collect())
     }
 }
