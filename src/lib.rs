@@ -185,7 +185,15 @@ impl Element {
     /// Returns true if the element matches the given selector.
     pub fn matches(&self, compound_selector: &CompoundSelector) -> bool {
         match compound_selector.parts.last() {
-            Some(&Selector::TagName(ref name)) => self.tag_name() == name,
+            Some(&Selector::TagName(ref name)) =>
+                self.tag_name() == name,
+
+            Some(&Selector::Id(ref id)) =>
+                self.attr("id") == Some(id),
+
+            Some(&Selector::Attribute(ref attr, MatchType::Equals, ref value)) =>
+                self.attr(attr) == Some(value),
+
             _ => unimplemented!(),
         }
     }

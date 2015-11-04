@@ -11,12 +11,12 @@ pub fn new_document() -> Document {
 
   <related>
     <!-- This is another comment -->
-    <item id="1">
+    <item id="id-1">
       <title>Another Sample</title>
       <ref>http://path.to.somewhere</ref>
     </item>
 
-    <item id="2">
+    <item id="id-2">
       <title>Other Sample</title>
       <ref>http://some.other.path</ref>
     </item>
@@ -116,6 +116,31 @@ fn it_returns_a_parse_error_when_the_selector_is_invalid() {
     } else {
         panic!("The invalid selector did not result in an error!");
     }
+}
+
+#[test]
+fn it_supports_the_attribute_selector() {
+    let document = new_document();
+
+    let elements: Vec<&Element> = document.select_all(r#"[long="false"]"#).unwrap().collect();
+
+    assert_eq!(elements.len(), 1);
+
+    let element = elements[0];
+    assert_eq!(element.text(), "Some unrecognisable scribbling");
+}
+
+#[test]
+fn it_supports_the_id_selector() {
+    let document = new_document();
+
+    let elements: Vec<&Element> = document.select_all("#id-1").unwrap().collect();
+
+    assert_eq!(elements.len(), 1);
+
+    let element = elements[0];
+    assert_eq!(element.tag_name(), "item");
+    assert_eq!(element.attr("id"), Some(&"id-1".to_string()));
 }
 
 #[test]
