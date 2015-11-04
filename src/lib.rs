@@ -32,7 +32,7 @@ mod selector;
 mod document;
 
 pub use self::document::Document;
-pub use self::selector::{ CompoundSelector, Scope, Selector, UnexpectedTokenError };
+pub use self::selector::{ CompoundSelector, MatchType, Scope, Selector, UnexpectedTokenError };
 
 use std::rc::Rc;
 use std::iter::{ empty, once };

@@ -1,4 +1,4 @@
-use rquery::{ Document, Element, SelectError };
+use rquery::{ Document, Element, SelectError, UnexpectedTokenError };
 
 pub fn new_document() -> Document {
     Document::new_from_xml_string(r#"
@@ -47,9 +47,7 @@ fn it_supports_the_tag_selector() {
     let elements: Vec<&Element> = document.select_all("note").unwrap().collect();
 
     assert_eq!(elements.len(), 1);
-
-    let element = elements[0];
-    assert_eq!(element.tag_name(), "note");
+    assert_eq!(elements[0].tag_name(), "note");
 }
 
 #[test]
@@ -104,6 +102,19 @@ fn it_returns_a_no_match_error_when_the_selector_does_not_match_any_element() {
         assert_eq!(err, SelectError::NoMatchError);
     } else {
         panic!("The select did not result in an error!");
+    }
+}
+
+#[test]
+fn it_returns_a_parse_error_when_the_selector_is_invalid() {
+    let document = new_document();
+
+    let result = document.select_all("?");
+
+    if let Err(err) = result {
+        assert_eq!(err, SelectError::ParseError(UnexpectedTokenError('?')));
+    } else {
+        panic!("The invalid selector did not result in an error!");
     }
 }
 
