@@ -24,12 +24,12 @@ pub fn new_document() -> Document {
 
   <!-- div soup goodness -->
   <div></div>
-  <div>
-    <other>
-      <div></div>
+  <div type="one">
+    <other type="three">
+      <div type="two"></div>
     </other>
     <div>
-      <div></div>
+      <div type="three"></div>
       <div>
         <div></div>
         <div></div>
@@ -141,6 +141,19 @@ fn it_supports_the_id_selector() {
     let element = elements[0];
     assert_eq!(element.tag_name(), "item");
     assert_eq!(element.attr("id"), Some(&"id-1".to_string()));
+}
+
+#[test]
+fn it_supports_the_compound_selectors() {
+    let document = new_document();
+
+    let elements: Vec<&Element> = document.select_all("div[type=three]").unwrap().collect();
+
+    assert_eq!(elements.len(), 1);
+
+    let element = elements[0];
+    assert_eq!(element.tag_name(), "div");
+    assert_eq!(element.attr("type"), Some(&"three".to_string()));
 }
 
 #[test]

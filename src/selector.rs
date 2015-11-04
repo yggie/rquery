@@ -67,6 +67,11 @@ fn allowed_character(c: char) -> bool {
     non_digit(c) || ('0' <= c && c <= '9') || c == '-' || c == '_'
 }
 
+#[inline]
+fn valid_start_token(c: char) -> bool {
+    c == '#' || c == '['
+}
+
 fn extract_valid_string(chars: &mut Peekable<Chars>) -> Result<String, UnexpectedTokenError> {
     extract_valid_string_until_token(chars, ' ')
 }
@@ -80,6 +85,8 @@ fn extract_valid_string_until_token(chars: &mut Peekable<Chars>, stop_token: cha
             break;
         } else if allowed_character(c) {
             string.push(chars.next().unwrap());
+        } else if valid_start_token(c) {
+            break;
         } else {
             return Err(UnexpectedTokenError(c));
         }
