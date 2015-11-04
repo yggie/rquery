@@ -1,6 +1,6 @@
 # rquery
 
-[![Build Status](https://travis-ci.org/yggie/rust-xml-query.svg?branch=master)](https://travis-ci.org/yggie/rust-xml-query)
+[![Build Status](https://travis-ci.org/yggie/rquery.svg?branch=master)](https://travis-ci.org/yggie/rquery)
 [![docs](https://img.shields.io/badge/documentation-rust_beta-6495ed.svg?style=flat-square)](https://yggie.github.io/rust-xml-query/rquery)
 [![crates.io](https://img.shields.io/crates/v/rquery.svg)](https://crates.io/crates/rquery)
 [![license](https://img.shields.io/crates/l/rquery.svg)](/LICENSE)
