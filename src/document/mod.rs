@@ -116,12 +116,12 @@ impl Document {
     }
 
     /// Searches the document for elements matching the given CSS selector.
-    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
+    pub fn select_all<'a>(&'a self, selector: &str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
         self.root.select_all(selector)
     }
 
     /// Just like `select_all` but only returns the first match.
-    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, SelectError> {
+    pub fn select<'a>(&'a self, selector: &str) -> Result<&'a Element, SelectError> {
         self.root.select(selector)
     }
 }

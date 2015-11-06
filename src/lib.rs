@@ -89,7 +89,7 @@ impl<'a, I: Iterator<Item=&'a Element>> Iterator for UniqueElements<'a, I> {
 impl Element {
     /// Searches the elements children for elements matching the given CSS
     /// selector.
-    pub fn select_all<'a>(&'a self, selector: &'a str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
+    pub fn select_all<'a>(&'a self, selector: &str) -> Result<Box<Iterator<Item=&'a Element> + 'a>, SelectError> {
         CompoundSelector::parse(selector)
             .map_err(|err| SelectError::ParseError(err))
             .and_then(|compound_selectors| {
@@ -130,7 +130,7 @@ impl Element {
     }
 
     /// Just like `select_all` but only returns the first match.
-    pub fn select<'a>(&'a self, selector: &'a str) -> Result<&'a Element, SelectError> {
+    pub fn select<'a>(&'a self, selector: &str) -> Result<&'a Element, SelectError> {
         self.select_all(selector).and_then(|mut iterator| {
             if let Some(element) = iterator.next() {
                 Ok(element)
