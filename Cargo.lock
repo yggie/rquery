@@ -1,20 +1,23 @@
 [root]
 name = "rquery"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
- "xml-rs 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "xml-rs 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "bitflags"
-version = "0.3.2"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "xml-rs"
-version = "0.2.2"
+version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "bitflags 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
+[metadata]
+"checksum bitflags 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aad18937a628ec6abcd26d1489012cc0e18c21798210f491af69ded9b881106d"
+"checksum xml-rs 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "65e74b96bd3179209dc70a980da6df843dff09e46eee103a0376c0949257e3ef"

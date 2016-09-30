@@ -1,6 +1,6 @@
 [package]
 name = "rquery"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Bryan Yap <bryan.yap.mh@gmail.com>"]
 description = "A simple implementation of a HTML/XML DOM tree which allows simple operations like querying by CSS selectors, makes dealing with XML files less painful."
 documentation = "https://yggie.github.io/rquery/rquery"
@@ -15,4 +15,4 @@ name = "rquery-tests"
 path = "tests/lib.rs"
 
 [dependencies]
-xml-rs = "*"
+xml-rs = "0.3.4"
