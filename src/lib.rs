@@ -31,7 +31,7 @@ extern crate xml;
 mod selector;
 mod document;
 
-pub use self::document::Document;
+pub use self::document::{Document, DocumentError};
 pub use self::selector::{ CompoundSelector, MatchType, Scope, Selector, UnexpectedTokenError };
 
 use std::rc::Rc;
