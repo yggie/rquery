@@ -1,13 +1,13 @@
 [package]
 name = "rquery"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Bryan Yap <bryan.yap.mh@gmail.com>"]
 description = "A simple implementation of a HTML/XML DOM tree which allows simple operations like querying by CSS selectors, makes dealing with XML files less painful."
 documentation = "https://yggie.github.io/rquery/rquery"
 homepage = "https://github.com/yggie/rquery"
 repository = "https://github.com/yggie/rquery"
 readme = "README.md"
-keywords = ["xml", "DOM"]
+keywords = ["xml", "DOM", "jquery"]
 license = "MIT"
 
 [[test]]
