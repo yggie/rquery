@@ -15,4 +15,4 @@ name = "rquery-tests"
 path = "tests/lib.rs"
 
 [dependencies]
-xml-rs = "0.3.4"
+xml-rs = "0.4"
