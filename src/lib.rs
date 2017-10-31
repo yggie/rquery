@@ -197,4 +197,9 @@ impl Element {
             }
         })
     }
+    
+    /// Returns the node index for the element.
+    pub fn node_index(&self) -> usize {
+        self.node_index
+    }
 }

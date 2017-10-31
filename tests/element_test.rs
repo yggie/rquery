@@ -34,3 +34,11 @@ fn it_knows_its_inner_text_contents() {
     let element = document.select("main").unwrap();
     assert_eq!(element.text().trim(), "This is some text");
 }
+
+#[test]
+fn it_knows_its_node_indices() {
+    let document = new_document();
+    
+    let element = document.select("main").unwrap();
+    assert_eq!(element.node_index(), 1);
+}
