@@ -53,12 +53,16 @@ impl Document {
                     let child_node = elements.pop().unwrap();
 
                     if let Some(mut parent) = elements.pop() {
+                        let next_child = &Rc::new(child_node);
+                        let text = next_child.text();
+                        
                         if let Some(ref mut children) = parent.children {
-                            children.push(Rc::new(child_node));
+                            children.push(next_child.to_owned());
                         } else {
-                            parent.children = Some(vec!(Rc::new(child_node)));
+                            parent.children = Some(vec!(next_child.to_owned()));
                         }
-
+                        
+                        parent.text.push_str(&text);
                         elements.push(parent);
                     } else {
                         return Ok(Document {
