@@ -1,4 +1,5 @@
 (function() {var implementors = {};
+implementors["xml"] = ["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"xml/struct.ParserConfig.html\" title=\"struct xml::ParserConfig\">ParserConfig</a>","impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"xml/struct.EmitterConfig.html\" title=\"struct xml::EmitterConfig\">EmitterConfig</a>",];
 implementors['xml'] = ["impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='xml/struct.ParserConfig.html' title='xml::ParserConfig'>ParserConfig</a>","impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='xml/struct.EmitterConfig.html' title='xml::EmitterConfig'>EmitterConfig</a>",];
 
             if (window.register_implementors) {

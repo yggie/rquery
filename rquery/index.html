@@ -9,12 +9,15 @@
 
     <title>rquery - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc mod">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -26,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'></p><script>window.sidebarCurrent = {name: 'rquery', ty: 'mod', relpath: '../'};</script>
+        <p class='location'>Crate rquery</p><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'rquery', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -40,114 +43,106 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>rquery</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-0' class='srclink' href='../src/rquery/lib.rs.html#1-200' title='goto source code'>[src]</a></span></h1>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>rquery</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/rquery/lib.rs.html#1-205' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This library offers the ability to represent XML documents as DOM trees,
 allowing querying with CSS selectors.</p>
-<pre class='rust rust-example-rendered'>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>rquery</span>;
 
-<span class='kw'>use</span> <span class='ident'>rquery</span>::<span class='ident'>Document</span>;
+<pre class="rust rust-example-rendered">
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">rquery</span>;
 
-<span class='kw'>fn</span> <span class='ident'>main</span>() {
-  <span class='kw'>let</span> <span class='ident'>document</span> <span class='op'>=</span> <span class='ident'>Document</span>::<span class='ident'>new_from_xml_file</span>(<span class='string'>&quot;tests/fixtures/sample.xml&quot;</span>).<span class='ident'>unwrap</span>();
+<span class="kw">use</span> <span class="ident">rquery</span>::<span class="ident">Document</span>;
 
-  <span class='kw'>let</span> <span class='ident'>title</span> <span class='op'>=</span> <span class='ident'>document</span>.<span class='ident'>select</span>(<span class='string'>&quot;title&quot;</span>).<span class='ident'>unwrap</span>();
-  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>title</span>.<span class='ident'>text</span>(), <span class='string'>&quot;Sample Document&quot;</span>);
-  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>title</span>.<span class='ident'>attr</span>(<span class='string'>&quot;ref&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;main-title&quot;</span>);
+<span class="kw">fn</span> <span class="ident">main</span>() {
+  <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> <span class="ident">Document</span>::<span class="ident">new_from_xml_file</span>(<span class="string">&quot;tests/fixtures/sample.xml&quot;</span>).<span class="ident">unwrap</span>();
 
-  <span class='kw'>let</span> <span class='ident'>item_count</span> <span class='op'>=</span> <span class='ident'>document</span>.<span class='ident'>select_all</span>(<span class='string'>&quot;item&quot;</span>).<span class='ident'>unwrap</span>().<span class='ident'>count</span>();
-  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>item_count</span>, <span class='number'>2</span>);
+  <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">document</span>.<span class="ident">select</span>(<span class="string">&quot;title&quot;</span>).<span class="ident">unwrap</span>();
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">title</span>.<span class="ident">text</span>(), <span class="string">&quot;Sample Document&quot;</span>);
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">title</span>.<span class="ident">attr</span>(<span class="string">&quot;ref&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;main-title&quot;</span>);
 
-  <span class='kw'>let</span> <span class='ident'>item_titles</span> <span class='op'>=</span> <span class='ident'>document</span>.<span class='ident'>select_all</span>(<span class='string'>&quot;item &gt; title&quot;</span>).<span class='ident'>unwrap</span>()
-    .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>element</span><span class='op'>|</span> <span class='ident'>element</span>.<span class='ident'>text</span>().<span class='ident'>clone</span>())
-    .<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>()
-    .<span class='ident'>join</span>(<span class='string'>&quot;, &quot;</span>);
-  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>item_titles</span>, <span class='string'>&quot;Another Sample, Other Sample&quot;</span>);
+  <span class="kw">let</span> <span class="ident">item_count</span> <span class="op">=</span> <span class="ident">document</span>.<span class="ident">select_all</span>(<span class="string">&quot;item&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">count</span>();
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">item_count</span>, <span class="number">2</span>);
+
+  <span class="kw">let</span> <span class="ident">item_titles</span> <span class="op">=</span> <span class="ident">document</span>.<span class="ident">select_all</span>(<span class="string">&quot;item &gt; title&quot;</span>).<span class="ident">unwrap</span>()
+    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">element</span><span class="op">|</span> <span class="ident">element</span>.<span class="ident">text</span>().<span class="ident">clone</span>())
+    .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>()
+    .<span class="ident">join</span>(<span class="string">&quot;, &quot;</span>);
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">item_titles</span>, <span class="string">&quot;Another Sample, Other Sample&quot;</span>);
 }</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.CompoundSelector.html'
-                               title='rquery::CompoundSelector'>CompoundSelector</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a component of a parsed CSS selector is used to match a single
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.CompoundSelector.html"
+                                  title='struct rquery::CompoundSelector'>CompoundSelector</a></td>
+                           <td class='docblock-short'>
+                                <p>Represents a component of a parsed CSS selector is used to match a single
 element.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Document.html'
-                               title='rquery::Document'>Document</a></td>
-                        <td class='docblock short'>
-                             <p>The DOM tree representation of the parsed document.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Element.html'
-                               title='rquery::Element'>Element</a></td>
-                        <td class='docblock short'>
-                             <p>Represents a single element in the DOM tree.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.UnexpectedTokenError.html'
-                               title='rquery::UnexpectedTokenError'>UnexpectedTokenError</a></td>
-                        <td class='docblock short'>
-                             <p>An error which is returned when parsing a selector encounters an unexpected
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Document.html"
+                                  title='struct rquery::Document'>Document</a></td>
+                           <td class='docblock-short'>
+                                <p>The DOM tree representation of the parsed document.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Element.html"
+                                  title='struct rquery::Element'>Element</a></td>
+                           <td class='docblock-short'>
+                                <p>Represents a single element in the DOM tree.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.UnexpectedTokenError.html"
+                                  title='struct rquery::UnexpectedTokenError'>UnexpectedTokenError</a></td>
+                           <td class='docblock-short'>
+                                <p>An error which is returned when parsing a selector encounters an unexpected
 token</p>
-
-                        </td>
-                    </tr>
-                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.MatchType.html'
-                               title='rquery::MatchType'>MatchType</a></td>
-                        <td class='docblock short'>
-                             <p>The match type for an attribute selector.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.Scope.html'
-                               title='rquery::Scope'>Scope</a></td>
-                        <td class='docblock short'>
-                             <p>The scope of the <code>CompoundSelector</code>.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.SelectError.html'
-                               title='rquery::SelectError'>SelectError</a></td>
-                        <td class='docblock short'>
-                             <p>Errors which can be returned when performing a select operation.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.Selector.html'
-                               title='rquery::Selector'>Selector</a></td>
-                        <td class='docblock short'>
-                             <p>The individual parts of the <code>CompoundSelector</code>. For example, the selector
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.DocumentError.html"
+                                  title='enum rquery::DocumentError'>DocumentError</a></td>
+                           <td class='docblock-short'>
+                                <p>The various errors that can happen when creating a document.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.MatchType.html"
+                                  title='enum rquery::MatchType'>MatchType</a></td>
+                           <td class='docblock-short'>
+                                <p>The match type for an attribute selector.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.Scope.html"
+                                  title='enum rquery::Scope'>Scope</a></td>
+                           <td class='docblock-short'>
+                                <p>The scope of the <code>CompoundSelector</code>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.SelectError.html"
+                                  title='enum rquery::SelectError'>SelectError</a></td>
+                           <td class='docblock-short'>
+                                <p>Errors which can be returned when performing a select operation.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.Selector.html"
+                                  title='enum rquery::Selector'>Selector</a></td>
+                           <td class='docblock-short'>
+                                <p>The individual parts of the <code>CompoundSelector</code>. For example, the selector
 <code>input[type=&quot;radio&quot;]</code> has two parts, the <code>TagName</code> and <code>Attribute</code>
 selectors.</p>
-
-                        </td>
-                    </tr>
-                </table></section>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -170,6 +165,8 @@ selectors.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -190,7 +187,7 @@ selectors.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
@@ -201,11 +198,8 @@ selectors.</p>
     <script>
         window.rootPath = "../";
         window.currentCrate = "rquery";
-        window.playgroundUrl = "";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

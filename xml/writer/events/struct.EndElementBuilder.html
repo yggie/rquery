@@ -9,12 +9,15 @@
 
     <title>xml::writer::events::EndElementBuilder - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
 
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -26,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../../index.html'>xml</a>::<wbr><a href='../index.html'>writer</a>::<wbr><a href='index.html'>events</a></p><script>window.sidebarCurrent = {name: 'EndElementBuilder', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Struct EndElementBuilder</p><div class="block items"><ul><li><a href="#methods">Methods</a></li></ul></div><p class='location'><a href='../../index.html'>xml</a>::<wbr><a href='../index.html'>writer</a>::<wbr><a href='index.html'>events</a></p><script>window.sidebarCurrent = {name: 'EndElementBuilder', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -40,16 +43,19 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>xml</a>::<wbr><a href='../index.html'>writer</a>::<wbr><a href='index.html'>events</a>::<wbr><a class='struct' href=''>EndElementBuilder</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-19789' class='srclink' href='../../../src/xml/writer/events.rs.html#148-150' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct EndElementBuilder&lt;'a&gt; {
-    // some fields omitted
-}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../../xml/writer/events/struct.EndElementBuilder.html' title='xml::writer::events::EndElementBuilder'>EndElementBuilder</a>&lt;'a&gt;</code></h3><div class='docblock'><p>A builder for a closing element event.</p>
-</div><div class='impl-items'><h4 id='method.name' class='method'><code>fn <a href='#method.name' class='fnname'>name</a>&lt;N&gt;(self, name: N) -&gt; <a class='struct' href='../../../xml/writer/events/struct.EndElementBuilder.html' title='xml::writer::events::EndElementBuilder'>EndElementBuilder</a>&lt;'a&gt; <span class='where'>where N: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='struct' href='../../../xml/name/struct.Name.html' title='xml::name::Name'>Name</a>&lt;'a&gt;&gt;</span></code></h4>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>xml</a>::<wbr><a href='../index.html'>writer</a>::<wbr><a href='index.html'>events</a>::<wbr><a class="struct" href=''>EndElementBuilder</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/xml/writer/events.rs.html#149-151' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct EndElementBuilder&lt;'a&gt; { /* fields omitted */ }</pre>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class="struct" href="../../../xml/writer/events/struct.EndElementBuilder.html" title="struct xml::writer::events::EndElementBuilder">EndElementBuilder</a>&lt;'a&gt;</code><a href='#impl' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/xml/writer/events.rs.html#154-166' title='goto source code'>[src]</a></span></h3>
+<div class='docblock'><p>A builder for a closing element event.</p>
+</div><div class='impl-items'><h4 id='method.name' class="method"><span id='name.v' class='invisible'><code>fn <a href='#method.name' class='fnname'>name</a>&lt;N&gt;(self, name: N) -&gt; <a class="struct" href="../../../xml/writer/events/struct.EndElementBuilder.html" title="struct xml::writer::events::EndElementBuilder">EndElementBuilder</a>&lt;'a&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;N: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../../../xml/name/struct.Name.html" title="struct xml::name::Name">Name</a>&lt;'a&gt;&gt;,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/xml/writer/events.rs.html#162-165' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Sets the name of this closing element.</p>
 
 <p>Usually the writer is able to determine closing element names automatically. If
@@ -79,6 +85,8 @@ closing element name is correct manually.</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -99,7 +107,7 @@ closing element name is correct manually.</p>
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
@@ -110,11 +118,8 @@ closing element name is correct manually.</p>
     <script>
         window.rootPath = "../../../";
         window.currentCrate = "xml";
-        window.playgroundUrl = "";
     </script>
-    <script src="../../../jquery.js"></script>
     <script src="../../../main.js"></script>
-    
-    <script async src="../../../search-index.js"></script>
+    <script defer src="../../../search-index.js"></script>
 </body>
 </html>
