@@ -14,3 +14,6 @@ mod document_test;
 
 #[cfg(test)]
 mod querying_by_selectors_test;
+
+#[cfg(test)]
+mod children_test;
